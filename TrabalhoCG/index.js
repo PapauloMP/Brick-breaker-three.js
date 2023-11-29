@@ -242,6 +242,7 @@ let csgFinal = CSG.toMesh(csgObject, new THREE.Matrix4());
     csgFinal.material = csgFinalMaterial;
     csgFinal.position.set(0, size.positionY, planeZ/2 + csgFinal.geometry.boundingSphere.radius - 2.5);
     csgFinal.bb = new THREE.Sphere(sphereMesh.geometry.position, planeX/4);
+    csgFinal.bb.center.copy(csgFinal.position)
     csgFinal.castShadow = true;
 scene.add(csgFinal);
 const initialPositions = [];
@@ -335,7 +336,7 @@ let speedMultiplier = 1;
 class Ball {
     constructor(radius){
         this.radius = radius;
-        this.speedConstant = planeX/500;
+        this.speedConstant = planeX/250;
         this.material = new THREE.MeshPhongMaterial({color : 0xffffff, shininess: 90, specular: 0x777777});
         this.object = new THREE.Mesh(new THREE.SphereGeometry(radius), this.material);
         this.bb = new THREE.Sphere(this.object.position, radius);
@@ -423,14 +424,14 @@ const powerUpSMaterial = new THREE.MeshPhongMaterial({
 const powerUpT = new THREE.Mesh( powerUpGeometry, powerUpTMaterial );
     powerUpT.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.MathUtils.degToRad(90))
     powerUpT.rotateOnAxis(new THREE.Vector3( 0, 0, 1), THREE.MathUtils.degToRad(90))
-    powerUpT.visible = false;
-    powerUpT.speed = -ball.initialDz/4;
+    powerUpT.visible = false; 
+    powerUpT.speed = -ball.initialDz/3;
     powerUpT.material.map = textureLoader.load('./assets/textureT.png');
 const powerUpS = new THREE.Mesh( powerUpGeometry, powerUpSMaterial );
     powerUpS.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.MathUtils.degToRad(90))
     powerUpS.rotateOnAxis(new THREE.Vector3( 0, 0, 1), THREE.MathUtils.degToRad(90))
     powerUpS.visible = false;
-    powerUpS.speed = -ball.initialDz/4;
+    powerUpS.speed = -ball.initialDz/3;
     powerUpS.material.map = textureLoader.load('./assets/textureT.png');
 const powerUps = [powerUpT, powerUpS];
 let powerUpSwitch = true;
@@ -628,7 +629,7 @@ render();
 function render()
 {
     if (ball.move || secondaryBall.move){
-        for (let i = 0; i < 4; i++){
+        for (let i = 0; i < 2; i++){
             if (ball.move){
                 moveBall(ball);
                 checkCollisions(ball);
@@ -699,7 +700,8 @@ export function restart(){
                 bricks[i][j].object.material.needsUpdate = true;
             }
         }
-    }  
+    } 
+    unsetFire();   
     resetLives();
     resetPosition();
     menu.querySelector("h1").innerText = 'Jogo pausado';

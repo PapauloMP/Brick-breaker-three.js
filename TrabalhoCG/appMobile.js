@@ -355,7 +355,7 @@ let speedMultiplier = 1;
 class Ball {
     constructor(radius){
         this.radius = radius;
-        this.speedConstant = planeX/500;
+        this.speedConstant = planeX/250;
         this.material = new THREE.MeshPhongMaterial({color : 0xffffff, shininess: 90, specular: 0x777777});
         this.object = new THREE.Mesh(new THREE.SphereGeometry(radius), this.material);
         this.bb = new THREE.Sphere(this.object.position, radius);
@@ -444,13 +444,13 @@ const powerUpT = new THREE.Mesh( powerUpGeometry, powerUpTMaterial );
     powerUpT.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.MathUtils.degToRad(90))
     powerUpT.rotateOnAxis(new THREE.Vector3( 0, 0, 1), THREE.MathUtils.degToRad(90))
     powerUpT.visible = false;
-    powerUpT.speed = -ball.initialDz/4;
+    powerUpT.speed = -ball.initialDz/3;
     powerUpT.material.map = textureLoader.load('./assets/textureT.png');
 const powerUpS = new THREE.Mesh( powerUpGeometry, powerUpSMaterial );
     powerUpS.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.MathUtils.degToRad(90))
     powerUpS.rotateOnAxis(new THREE.Vector3( 0, 0, 1), THREE.MathUtils.degToRad(90))
     powerUpS.visible = false;
-    powerUpS.speed = -ball.initialDz/4;
+    powerUpS.speed = -ball.initialDz/3;
     powerUpS.material.map = textureLoader.load('./assets/textureT.png');
 const powerUps = [powerUpT, powerUpS];
 let powerUpSwitch = true;
@@ -592,7 +592,7 @@ function checkCollisions(ball) {
                     if (commonBrickSound.isPlaying) commonBrickSound.stop();
                     commonBrickSound.play();
                     powerUpCounter++;
-                    if (powerUpCounter == 2){
+                    if (powerUpCounter == 10){
                         if (!powerUpT.visible && numBalls == 1 && powerUpSwitch){
                             powerUpT.position.copy(bricks[i][j].object.position);
                             powerUpT.bb = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()).setFromObject(powerUpT);
@@ -648,7 +648,7 @@ render();
 function render()
 {
     if (ball.move || secondaryBall.move){
-        for (let i = 0; i < 4; i++){
+        for (let i = 0; i < 2; i++){
             if (ball.move){
                 moveBall(ball);
                 checkCollisions(ball);
@@ -716,6 +716,7 @@ export function restart(){
             }
         }
     }  
+    unsetFire();
     resetLives();
     resetPosition();
     menu.querySelector("h1").innerText = 'Jogo pausado';
